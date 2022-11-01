@@ -12,12 +12,12 @@ function CalendarJs(el) {
         return calendarJsElement.calendarjs;
     }
 
-    this.drawYearCalendar = function(targetDate = selectedDate) {
+    this.drawYearCalendar = function(targetFullYear = selectedDate.getFullYear()) {
         const NUMBER_OF_YEAR_OPTIONS = 10;
         var yearsArray = [];
         var yearsHTML = '';
 
-        var targetFullYear = targetDate.getFullYear();
+        // var targetFullYear = targetDate.getFullYear();
         var targetFullYearLastDigit = (targetFullYear % 1000) % 10;
 
         for (let i = 1; i <= targetFullYearLastDigit; i++) {
@@ -35,15 +35,18 @@ function CalendarJs(el) {
             yearsHTML += `<div onclick="getCalendarJs(this).selectYear(${year})" class="year" data-year="${year}">${year}</div>`;
         }
 
-        var yearsRange = `${targetFullYear - targetFullYearLastDigit} - ${targetFullYear + (10 - targetFullYearLastDigit)}`;
+        var yearsRange = `${yearsArray[0]} - ${yearsArray[NUMBER_OF_YEAR_OPTIONS]}`;
+
+        var prev = new Date(yearsArray[0] - 1, 1, 1);
+        var next = new Date(yearsArray[NUMBER_OF_YEAR_OPTIONS] + 1, 1, 1);
 
         el.innerHTML = `
         <div calendar-head>
-            <div>«</div>
-            <div>‹</div>
-            <div>${yearsRange}</div>
-            <div>›</div>
-            <div>»</div>
+            <div class="first">«</div>
+            <div onclick="getCalendarJs(this).drawYearCalendar(${prev.getFullYear()})" class="prev">‹</div>
+            <div class="title">${yearsRange}</div>
+            <div onclick="getCalendarJs(this).drawYearCalendar(${next.getFullYear()})" class="next">›</div>
+            <div class="last">»</div>
         </div>
         <div calendar-body years>
             ${yearsHTML}
