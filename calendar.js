@@ -91,14 +91,14 @@ function CalendarJs(el) {
 
         var dates = '';
         for (let i = 0; i < firstDayDate.getDay(); i++) {
-            dates += `<div class="date"></div>`;
+            dates += `<div class="date empty"></div>`;
         }
         var lastDate = lastDayDate.getDate();
         for (let i = 1; i <= lastDate; i++) {
             dates += `<div onclick="getCalendarJs(this).selectDate(${i})" class="date" data-date="${i}">${i}</div>`;
         }
         for (let i = lastDayDate.getDay(); i < NUM_DAYS_IN_WEEK; i++) {
-            dates += `<div class="date"></div>`;
+            dates += `<div class="date empty"></div>`;
         }
 
         el.innerHTML =  `
@@ -233,7 +233,7 @@ function CalendarJs(el) {
             background-color: var(--calendar_selected_background-color);
             color: var(--calendar_selected_color);
         }
-        [calendar-body][dates] .date:hover:not(.date.selected) {
+        [calendar-body][dates] .date:hover:not(.date.selected):not(.date.empty) {
             background-color: var(--calendar_hover_background-color);
             color: var(--calendar_hover_color);
         }
