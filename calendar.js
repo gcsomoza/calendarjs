@@ -143,7 +143,7 @@ function CalendarJs(el) {
     
     this.dispatchEventChange = function() {
         var event = new Event('change');
-        event.selectedDate = this.getSelectedDate();
+        event.selected_date = this.getSelectedDate();
         el.dispatchEvent(event);
     }
 
@@ -151,6 +151,7 @@ function CalendarJs(el) {
         selectedDate.setDate(date);
         this.highlightSelectedDate();
 
+        this.setValueByDate(selectedDate);
         this.dispatchEventChange();
     }
 
@@ -159,6 +160,7 @@ function CalendarJs(el) {
         this.highlightSelectedMonth();
 
         this.drawDateCalendar();
+        this.setValueByDate(selectedDate);
         this.dispatchEventChange();
     }
 
@@ -167,9 +169,30 @@ function CalendarJs(el) {
         this.highlightSelectedYear();
 
         this.drawMonthCalendar();
+        this.setValueByDate(selectedDate);
         this.dispatchEventChange();
     }
 
+    /**
+     * @param {Date} jsDate 
+     */
+    this.setValueByDate = function(jsDate) {
+        var month = (jsDate.getMonth() + 1).toString().padStart(2, '0');
+        var date = jsDate.getDate().toString().padStart(2, '0');
+        el.setAttribute('value', `${jsDate.getFullYear()}-${month}-${date}`);
+        el.value = el.getAttribute('value');
+    }
+
+    /**
+     * @param {string} strDate YYYY-MM-DD
+     */
+    this.setSelectedDate = function(strDate) {
+        selectedDate = new Date(strDate);
+    }
+
+    /**
+     * @returns {Date}
+     */
     this.getSelectedDate = function() {
         return selectedDate;
     }
@@ -190,6 +213,7 @@ function CalendarJs(el) {
             width: fit-content;
             min-width: 300px;
             border: 1px solid #ccc;
+            padding: 1rem;
         }
 
         [calendar-head] {
@@ -285,6 +309,10 @@ function CalendarJs(el) {
     this.init = function() {
         if (document.querySelector('[calendar-styles]') == null) {
             this.appendCalendarStylesToHead();
+        }
+
+        if (el.hasAttribute('value')) {
+            this.setSelectedDate(el.getAttribute('value'));
         }
 
         this.drawDateCalendar();

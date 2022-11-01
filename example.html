@@ -7,9 +7,10 @@
     <title>CalendarJs Example</title>
 </head>
 <body>
+    <input id="calendar-input" type="text" value="2022-11-07">
     <div style="display: flex;">
-        <div calendar onchange="handleOnChangeCalendarJsDate(event)"></div>
-        <div calendar another onchange="handleOnChangeCalendarJsDate(event)"></div>
+        <div calendar onchange="handleOnChangeCalendarJsDate(event)" value="2022-11-01"></div>
+        <div calendar another onchange="handleOnChangeCalendarJsDate(event)" value="2022-11-07"></div>
     </div>
 </body>
 <script src="calendar.js"></script>
@@ -20,7 +21,7 @@
     function handleOnChangeCalendarJsDate(event) {
         var calendarJs = getCalendarJs(event.target);
         var selectedDate = calendarJs.getSelectedDate();
-        console.log('selectedDate', selectedDate);
+        document.getElementById('calendar-input').setAttribute('value', event.target.value);
     }
 </script>
 </html>
