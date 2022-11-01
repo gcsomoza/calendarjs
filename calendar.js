@@ -44,7 +44,7 @@ function CalendarJs(el) {
         <div calendar-head>
             <div class="first">«</div>
             <div onclick="getCalendarJs(this).drawYearCalendar(${prev.getFullYear()})" class="prev">‹</div>
-            <div class="title">${yearsRange}</div>
+            <div class="title year">${yearsRange}</div>
             <div onclick="getCalendarJs(this).drawYearCalendar(${next.getFullYear()})" class="next">›</div>
             <div class="last">»</div>
         </div>
@@ -65,13 +65,13 @@ function CalendarJs(el) {
 
         el.innerHTML = `
         <div calendar-head>
-            <div>«</div>
-            <div>‹</div>
-            <div onclick="getCalendarJs(this).drawYearCalendar()">
+            <div class="first">«</div>
+            <div class="prev">‹</div>
+            <div onclick="getCalendarJs(this).drawYearCalendar()" class="title">
                 ${targetDate.getFullYear()}
             </div>
-            <div>›</div>
-            <div>»</div>
+            <div class="next">›</div>
+            <div class="last">»</div>
         </div>
         <div calendar-body months>
             ${months}
@@ -101,13 +101,13 @@ function CalendarJs(el) {
 
         el.innerHTML =  `
         <div calendar-head>
-            <div>«</div>
-            <div>‹</div>
-            <div onclick="getCalendarJs(this).drawMonthCalendar()">
+            <div class="first">«</div>
+            <div class="prev">‹</div>
+            <div onclick="getCalendarJs(this).drawMonthCalendar()" class="title">
                 ${monthNames[targetDate.getMonth()]} ${targetDate.getFullYear()}
             </div>
-            <div>›</div>
-            <div>»</div>
+            <div class="next">›</div>
+            <div class="last">»</div>
         </div>
         <div calendar-body dates>
             <div class="day">S</div>

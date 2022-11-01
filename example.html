@@ -16,8 +16,31 @@
         [calendar-head] {
             display: flex;
             justify-content: center;
-            grid-gap: 1rem;
+            grid-gap: 0;
+            padding: 0;
+        }
+
+        [calendar-head] .title,
+        [calendar-head] .first,
+        [calendar-head] .last,
+        [calendar-head] .prev,
+        [calendar-head] .next
+        {
             padding: 1rem;
+            cursor: pointer;
+        }
+        [calendar-head] .title:hover:not(.title.year),
+        [calendar-head] .first:hover,
+        [calendar-head] .last:hover,
+        [calendar-head] .prev:hover,
+        [calendar-head] .next:hover
+        {
+            background-color: #006edc35;
+            color: black;
+        }
+
+        [calendar-head] .title.year {
+            cursor: default;
         }
 
         [calendar-body][dates] {
