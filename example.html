@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalendarJs Example</title>
+</head>
+<body>
+    <style>
+        [calendar] {
+            width: fit-content;
+            border: 1px solid #ccc;
+        }
+
+        [calendar-head] {
+            display: flex;
+            justify-content: center;
+            grid-gap: 1rem;
+            padding: 1rem;
+        }
+
+        [calendar-body][dates] {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto auto;
+            grid-gap: 0;
+            padding: 0;
+            text-align: center;
+        }
+        [calendar-body][dates] .date.selected {
+            background-color: #006edc;
+            color: white;
+        }
+        [calendar-body][dates] .date:hover:not(.date.selected) {
+            background-color: #006edc35;
+            color: black;
+        }
+        [calendar-body][dates] .day,
+        [calendar-body][dates] .date
+        {
+            padding: .75rem;
+            cursor: default;
+        }
+        [calendar-body][dates] .date
+        {
+            cursor: pointer;
+        }
+
+        [calendar-body][months],
+        [calendar-body][years]
+        {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-gap: 1rem;
+            padding: 1rem;
+            text-align: center;
+        }
+    </style>
+    <div calendar></div>
+</body>
+<script src="calendar.js"></script>
+<script>
+    new CalendarJs(document.querySelector('[calendar]'));
+</script>
+</html>
