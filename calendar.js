@@ -20,12 +20,12 @@ function CalendarJs(el) {
 
         for (let i = 1; i <= targetFullYearLastDigit; i++) {
             var year = targetFullYear - i;
-            years = `<div onclick="getCalendarJs(this).selectYear(${year})">${year}</div>` + years;
+            years = `<div onclick="getCalendarJs(this).selectYear(${year})" class="year" data-year="${year}">${year}</div>` + years;
         }
-        years += `<div onclick="getCalendarJs(this).selectYear(${targetFullYear})">${targetFullYear}</div>`;
+        years += `<div onclick="getCalendarJs(this).selectYear(${targetFullYear})" class="year" data-year="${targetFullYear}">${targetFullYear}</div>`;
         for (let i = targetFullYearLastDigit; i <= (10 - targetFullYearLastDigit); i++) {
             var year = targetFullYear + i;
-            years += `<div onclick="getCalendarJs(this).selectYear(${year})">${year}</div>`;
+            years += `<div onclick="getCalendarJs(this).selectYear(${year})" class="year" data-year="${year}">${year}</div>`;
         }
 
         var yearsRange = `${targetFullYear - targetFullYearLastDigit} - ${targetFullYear + (10 - targetFullYearLastDigit)}`;
@@ -42,13 +42,15 @@ function CalendarJs(el) {
             ${years}
         </div>
         `;
+
+        this.highlightSelectedYear();
     }
 
     this.drawMonthCalendar = function(targetDate = selectedDate) {
         var months = '';
         for (let i = 0; i < monthNames.length; i++) {
             const monthName = monthNames[i];
-            months += `<div onclick="getCalendarJs(this).selectMonth(i)">${monthName}</div>`;
+            months += `<div onclick="getCalendarJs(this).selectMonth(${i})" class="month" data-month="${i}">${monthName}</div>`;
         }
 
         el.innerHTML = `
@@ -65,6 +67,8 @@ function CalendarJs(el) {
             ${months}
         </div>
         `;
+
+        this.highlightSelectedMonth();
     }
 
     this.drawDateCalendar = function(targetDate = selectedDate) {
@@ -106,6 +110,8 @@ function CalendarJs(el) {
             ${dates}
         </div>
         `;
+
+        this.highlightSelectedDate();
     }
 
     this.highlightSelectedDate = function() {
@@ -113,14 +119,37 @@ function CalendarJs(el) {
         el.querySelector(`[data-date="${selectedDate.getDate()}"]`)?.classList.add('selected');
     }
 
+    this.highlightSelectedMonth = function() {
+        el.querySelector(`[data-month].selected`)?.classList.remove('selected');
+        el.querySelector(`[data-month="${selectedDate.getMonth()}"]`)?.classList.add('selected');
+    }
+
+    this.highlightSelectedYear = function() {
+        el.querySelector(`[data-year].selected`)?.classList.remove('selected');
+        el.querySelector(`[data-year="${selectedDate.getFullYear()}"]`)?.classList.add('selected');
+    }
+
     this.selectDate = function(date) {
         selectedDate.setDate(date);
         this.highlightSelectedDate();
     }
 
+    this.selectMonth = function(month) {
+        selectedDate.setMonth(month);
+        this.highlightSelectedMonth();
+
+        this.drawDateCalendar();
+    }
+
+    this.selectYear = function(year) {
+        selectedDate.setFullYear(year);
+        this.highlightSelectedYear();
+
+        this.drawMonthCalendar();
+    }
+
     this.init = function() {
         this.drawDateCalendar();
-        this.highlightSelectedDate();
         el.calendarjs = this;
     }
 

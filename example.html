@@ -51,9 +51,29 @@
         {
             display: grid;
             grid-template-columns: auto auto auto;
-            grid-gap: 1rem;
-            padding: 1rem;
+            grid-gap: 0;
+            padding: 0;
+            padding-bottom: 1rem;
             text-align: center;
+        }
+        
+        [calendar-body][months] .month,
+        [calendar-body][years] .year
+        {
+            padding: .75rem;
+            cursor: pointer;
+        }
+        [calendar-body][months] .month.selected,
+        [calendar-body][years] .year.selected
+        {
+            background-color: #006edc;
+            color: white;
+        }
+        [calendar-body][months] .month:hover:not(.month.selected),
+        [calendar-body][years] .year:hover:not(.year.selected)
+        {
+            background-color: #006edc35;
+            color: black;
         }
     </style>
     <div calendar></div>
