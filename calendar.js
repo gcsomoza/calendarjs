@@ -3,13 +3,15 @@ function CalendarJs(el) {
 
     var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    /**
-     * Get calendar js object associated with the given element
-     * @param {*} element 
-     */
-    window.getCalendarJs = function(element) {
-        var calendarJsElement = element.closest('[calendar]');
-        return calendarJsElement.calendarjs;
+    if (typeof window.getCalendarJs !== 'function') {
+        /**
+         * Get calendar js object associated with the given element
+         * @param {*} element 
+         */
+        window.getCalendarJs = function(element) {
+            var calendarJsElement = element.closest('[calendar]');
+            return calendarJsElement.calendarjs;
+        }
     }
 
     this.drawYearCalendar = function(targetFullYear = selectedDate.getFullYear()) {
@@ -138,10 +140,18 @@ function CalendarJs(el) {
         el.querySelector(`[data-year].selected`)?.classList.remove('selected');
         el.querySelector(`[data-year="${selectedDate.getFullYear()}"]`)?.classList.add('selected');
     }
+    
+    this.dispatchEventChange = function() {
+        var event = new Event('change');
+        event.selectedDate = this.getSelectedDate();
+        el.dispatchEvent(event);
+    }
 
     this.selectDate = function(date) {
         selectedDate.setDate(date);
         this.highlightSelectedDate();
+
+        this.dispatchEventChange();
     }
 
     this.selectMonth = function(month) {
@@ -149,6 +159,7 @@ function CalendarJs(el) {
         this.highlightSelectedMonth();
 
         this.drawDateCalendar();
+        this.dispatchEventChange();
     }
 
     this.selectYear = function(year) {
@@ -156,9 +167,126 @@ function CalendarJs(el) {
         this.highlightSelectedYear();
 
         this.drawMonthCalendar();
+        this.dispatchEventChange();
+    }
+
+    this.getSelectedDate = function() {
+        return selectedDate;
+    }
+
+    this.appendCalendarStylesToHead = function() {
+        const style = document.createElement('style');
+        style.setAttribute('calendar-styles', '');
+
+        style.textContent = `
+        :root {
+            --calendar_selected_background-color: #006edc; 
+            --calendar_selected_color: white; 
+            --calendar_hover_background-color: #006edc35; 
+            --calendar_hover_color: #black; 
+        }
+
+        [calendar] {
+            width: fit-content;
+            min-width: 300px;
+            border: 1px solid #ccc;
+        }
+
+        [calendar-head] {
+            display: flex;
+            justify-content: center;
+            grid-gap: 0;
+            padding: 0;
+        }
+
+        [calendar-head] .title,
+        [calendar-head] .first,
+        [calendar-head] .last,
+        [calendar-head] .prev,
+        [calendar-head] .next
+        {
+            padding: 1rem;
+            cursor: pointer;
+        }
+        [calendar-head] .title:hover:not(.title.year),
+        [calendar-head] .first:hover,
+        [calendar-head] .last:hover,
+        [calendar-head] .prev:hover,
+        [calendar-head] .next:hover
+        {
+            background-color: var(--calendar_hover_background-color);
+            color: var(--calendar_hover_color);
+        }
+
+        [calendar-head] .title.year {
+            cursor: default;
+        }
+
+        [calendar-body][dates] {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto auto;
+            grid-gap: 0;
+            padding: 0;
+            text-align: center;
+        }
+        [calendar-body][dates] .date.selected {
+            background-color: var(--calendar_selected_background-color);
+            color: var(--calendar_selected_color);
+        }
+        [calendar-body][dates] .date:hover:not(.date.selected) {
+            background-color: var(--calendar_hover_background-color);
+            color: var(--calendar_hover_color);
+        }
+        [calendar-body][dates] .day,
+        [calendar-body][dates] .date
+        {
+            padding: .75rem;
+            cursor: default;
+        }
+        [calendar-body][dates] .date
+        {
+            cursor: pointer;
+        }
+
+        [calendar-body][months],
+        [calendar-body][years]
+        {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-gap: 0;
+            padding: 0;
+            padding-bottom: 1rem;
+            text-align: center;
+        }
+        
+        [calendar-body][months] .month,
+        [calendar-body][years] .year
+        {
+            padding: .75rem;
+            cursor: pointer;
+        }
+        [calendar-body][months] .month.selected,
+        [calendar-body][years] .year.selected
+        {
+            background-color: var(--calendar_selected_background-color);
+            color: var(--calendar_selected_color);
+        }
+        [calendar-body][months] .month:hover:not(.month.selected),
+        [calendar-body][years] .year:hover:not(.year.selected)
+        {
+            background-color: var(--calendar_hover_background-color);
+            color: var(--calendar_hover_color);
+        }
+        `;
+        
+        document.head.appendChild(style);
     }
 
     this.init = function() {
+        if (document.querySelector('[calendar-styles]') == null) {
+            this.appendCalendarStylesToHead();
+        }
+
         this.drawDateCalendar();
         el.calendarjs = this;
     }
