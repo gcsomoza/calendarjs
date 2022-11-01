@@ -8,6 +8,13 @@
 </head>
 <body>
     <style>
+        :root {
+            --calendar_selected_background-color: #006edc; 
+            --calendar_selected_color: white; 
+            --calendar_hover_background-color: #006edc35; 
+            --calendar_hover_color: #black; 
+        }
+
         [calendar] {
             width: fit-content;
             border: 1px solid #ccc;
@@ -35,8 +42,8 @@
         [calendar-head] .prev:hover,
         [calendar-head] .next:hover
         {
-            background-color: #006edc35;
-            color: black;
+            background-color: var(--calendar_hover_background-color);
+            color: var(--calendar_hover_color);
         }
 
         [calendar-head] .title.year {
@@ -51,12 +58,12 @@
             text-align: center;
         }
         [calendar-body][dates] .date.selected {
-            background-color: #006edc;
-            color: white;
+            background-color: var(--calendar_selected_background-color);
+            color: var(--calendar_selected_color);
         }
         [calendar-body][dates] .date:hover:not(.date.selected) {
-            background-color: #006edc35;
-            color: black;
+            background-color: var(--calendar_hover_background-color);
+            color: var(--calendar_hover_color);
         }
         [calendar-body][dates] .day,
         [calendar-body][dates] .date
@@ -89,14 +96,14 @@
         [calendar-body][months] .month.selected,
         [calendar-body][years] .year.selected
         {
-            background-color: #006edc;
-            color: white;
+            background-color: var(--calendar_selected_background-color);
+            color: var(--calendar_selected_color);
         }
         [calendar-body][months] .month:hover:not(.month.selected),
         [calendar-body][years] .year:hover:not(.year.selected)
         {
-            background-color: #006edc35;
-            color: black;
+            background-color: var(--calendar_hover_background-color);
+            color: var(--calendar_hover_color);
         }
     </style>
     <div calendar></div>
