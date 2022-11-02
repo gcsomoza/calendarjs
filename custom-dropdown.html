@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Dropdown</title>
+    <script src="custom-dropdown.js"></script>
+</head>
+<body>
+    <input type="text">
+    <custom-dropdown onchange="customDropdownChanged(event)"></custom-dropdown>
+</body>
+<script>
+    var customDropdown = document.querySelector('custom-dropdown');
+    customDropdown.options = [
+        { value: 1, text: 'CARTON' },
+    ];
+
+    function customDropdownChanged(event) {
+        console.log(event.target.value);
+    }
+</script>
+</html>
