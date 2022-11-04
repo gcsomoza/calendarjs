@@ -35,6 +35,7 @@ class CustomDropdown extends HTMLElement {
 
     set selectedIndex(value) {
         this._selectedIndex = value;
+        this.highlightSelectedOption();
         this.changeDisplayedSelectedOptionText();
         this.dispatchEventChange();
     }
@@ -64,6 +65,11 @@ class CustomDropdown extends HTMLElement {
         this.querySelector('[options]').innerHTML = options;
     }
 
+    highlightSelectedOption() {
+        this.querySelector(`[options] .selected`)?.classList.remove('selected');
+        this.querySelector(`[options] [index="${this.selectedIndex}"]`)?.classList.add('selected');
+    }
+
     changeDisplayedSelectedOptionText() {
         const text = this.options[this.selectedIndex].text;
         this.querySelector('[selected-option]').textContent = text;
@@ -76,21 +82,67 @@ class CustomDropdown extends HTMLElement {
 
     optionClicked(event) {
         this.selectedIndex = event.target.getAttribute('index');
+        this.hideOptions(event);
     }
 
     getOptionsHTML() {
+        const selectedIndex = this.selectedIndex;
         let options = '';
         for (let i = 0; i < this.options.length; i++) {
             const option = this.options[i];
-            options += `<div index="${i}" value="${option.value}" onclick="getCustomDropdown(this).optionClicked(event)">${option.text}</div>`;
+            const selected = (i == selectedIndex) ? 'selected' : '';
+            options += `<div class="option ${selected}" index="${i}" value="${option.value}" onclick="getCustomDropdown(this).optionClicked(event)">${option.text}</div>`;
         }
         return options;
+    }
+
+    showOptions() {
+        this.querySelector('[options]').style.display = 'block';
+    }
+    
+    hideOptions() {
+        this.querySelector('[options]').style.display = 'none';
     }
 
     drawDropdown() {
         const options = this.getOptionsHTML();
         this.innerHTML = `
-        <div selected-option>${this.options[this.selectedIndex].text}</div>
+        <style>
+            custom-dropdown {
+                position: relative;
+            }
+            [selected-option] {
+                display: inline-block;
+                min-width: 150px;
+                padding: .2rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            [options] {
+                position: fixed;
+                display: none;
+                min-width: 150px;
+                padding: .2rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            [options] .option {
+                padding: .2rem;
+            }
+            [options] .option.selected {
+                background-color: #006edc;
+                color: white;
+            }
+            [options] .option:hover:not(.option.selected) {
+                background-color: #eee;
+            }
+            [selected-option],
+            [options] .option
+            {
+                cursor: pointer;
+            }
+        </style>
+        <div selected-option onclick="getCustomDropdown(this).showOptions()">${this.options[this.selectedIndex].text}</div>
         <div options>
             ${options}
         </div>

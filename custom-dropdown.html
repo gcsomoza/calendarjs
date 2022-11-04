@@ -8,12 +8,17 @@
     <script src="custom-dropdown.js"></script>
 </head>
 <body>
-    <input type="text">
     <custom-dropdown onchange="customDropdownChanged(event)"></custom-dropdown>
+    <custom-dropdown class="2" onchange="customDropdownChanged(event)"></custom-dropdown>
 </body>
 <script>
     var customDropdown = document.querySelector('custom-dropdown');
     customDropdown.options = [
+        { value: 1, text: 'CARTON' },
+    ];
+
+    var customDropdown2 = document.querySelector('custom-dropdown.2');
+    customDropdown2.options = [
         { value: 1, text: 'CARTON' },
     ];
 
